@@ -3,11 +3,12 @@ use std::collections::HashMap;
 use anyhow::Result;
 
 pub struct Rule {
+    /// function mapping neighborhoods to outputs
     pub func: HashMap<String, u8>,
 }
 
 impl Rule {
-    /// Build a new rule from an array of output maps
+    /// Build a new rule from an array of output mappings
     ///
     /// Elements in the array determine the output rules for
     /// neighborhoods with the following order:
@@ -26,7 +27,16 @@ impl Rule {
     ///  produce output 0, neighborhood 110 would produce output 1,
     ///  neighborhood of 101 would produce output 1, neighborhood of
     ///  100 would produce output 0, etc...
-    pub fn new(map: [u8; 8]) -> Self {
+    pub fn new(map: [u8; 8]) -> Result<Self> {
+        for x in map {
+            if ![0, 1].contains(&x) {
+                return Err(anyhow::format_err!(
+                    "invalid rule (values must be either 0 or 1) found: {:?}",
+                    x
+                ));
+            }
+        }
+
         let mut func = HashMap::new();
         func.insert("111".into(), map[0]);
         func.insert("110".into(), map[1]);
@@ -36,10 +46,11 @@ impl Rule {
         func.insert("010".into(), map[5]);
         func.insert("001".into(), map[6]);
         func.insert("000".into(), map[7]);
-        Self { func }
+        Ok(Self { func })
     }
 
-    pub fn lookup(self, input: String) -> u8 {
-        self.func.get(&input).unwrap().to_owned()
+    /// Lookup the output given a neighborhood
+    pub(crate) fn lookup(&self, input: &str) -> u8 {
+        self.func.get(input).unwrap().to_owned()
     }
 }
