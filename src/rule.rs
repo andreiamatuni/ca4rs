@@ -49,6 +49,17 @@ impl Rule {
         Ok(Self { func })
     }
 
+    /// Create a Rule based on the standard set of 256 rule numberings
+    pub fn number(num: u8) -> Result<Self> {
+        let str_rep = format!("{num:08b}");
+        let array: Vec<u8> = str_rep
+            .chars()
+            .map(|x| x.to_digit(2).unwrap() as u8)
+            .collect();
+
+        Rule::new(array.try_into().unwrap())
+    }
+
     /// Lookup the output given a neighborhood
     pub(crate) fn lookup(&self, input: &str) -> u8 {
         self.func.get(input).unwrap().to_owned()
