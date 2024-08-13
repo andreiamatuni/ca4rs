@@ -1,11 +1,9 @@
 use anyhow::Result;
 use ndarray::prelude::*;
-use plotters::coord::Shift;
 use plotters::prelude::*;
-use plotters::style::full_palette::{GREY_200, GREY_50, RED_100};
+use plotters::style::full_palette::GREY_200;
 
 pub fn draw(output: &str, sim: &Array2<u8>) -> Result<()> {
-    // let root = BitMapBackend::new(output, (4096, 2048)).into_drawing_area();
     let root = BitMapBackend::new(output, (8192, 4096)).into_drawing_area();
 
     root.fill(&WHITE)?;

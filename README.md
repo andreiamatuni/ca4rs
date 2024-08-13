@@ -2,4 +2,6 @@
 
 Cellular Automata for Rust
 
-![alt text](https://github.com/andreiamatuni/ca4rs/blob/master/docs/images/rule_30.png?raw=true)
+![rule_30](https://github.com/andreiamatuni/ca4rs/blob/master/docs/images/rule_30.png?raw=true)
+
+**ca4rs** is a Rust library for simulating elementary cellular automata and running various experiments on them.
