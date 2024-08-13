@@ -1,10 +1,11 @@
 use anyhow::Result;
+use ndarray::prelude::*;
 
 use crate::rule;
 
 /// Cellular Automata
 ///
-/// This CA implements a given rule in a particular dimension
+/// This CA implements a given rule with an initial input state
 pub struct CA {
     pub rule: rule::Rule,
     pub input: Vec<u8>,
@@ -16,28 +17,22 @@ impl CA {
         Self { rule, input }
     }
 
-    pub fn simulate(self, len: usize) -> Vec<Vec<u8>> {
-        let mut result: Vec<Vec<u8>> = vec![];
-        result.push(self.input.clone());
+    pub fn simulate(self, len: usize) -> Array2<u8> {
+        let mut res = ndarray::Array2::<u8>::zeros((len, self.input.len()));
+        let input = Array1::<u8>::from_vec(self.input.clone());
+        res.slice_mut(s![0, 0..]).assign(&input);
 
-        let mut curr_row = self.input.clone();
-        let mut next_row = curr_row.clone();
-
-        for _ in 0..len {
-            for i in 1..curr_row.len() - 1 {
-                let neighbors = self.cells_to_str(i, &curr_row);
+        for sim in 0..len - 1 {
+            for i in 1..res.shape()[1] - 1 {
+                let neighbors = self.cells_to_str(i, &res.slice(s![sim, 0..]));
                 let cell_output = self.rule.lookup(&neighbors);
-
-                next_row[i] = cell_output;
+                res[[sim + 1, i]] = cell_output;
             }
-
-            curr_row = next_row.clone();
-            result.push(next_row.clone());
         }
-        result
+        res
     }
 
-    fn cells_to_str(&self, idx: usize, row: &Vec<u8>) -> String {
+    fn cells_to_str(&self, idx: usize, row: &ArrayView1<u8>) -> String {
         let string = format!("{}{}{}", row[idx - 1], row[idx], row[idx + 1]);
         string
     }
