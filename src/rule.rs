@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use anyhow::Result;
 
+#[derive(Clone, Debug)]
 pub struct Rule {
     /// function mapping neighborhoods to outputs
     pub func: HashMap<String, u8>,

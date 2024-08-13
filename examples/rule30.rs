@@ -10,7 +10,7 @@ fn main() {
     // build the cellular automata
     let mut ca = CA::new(r, input);
     // simulate some number of steps (here it's N = half the input length)
-    let output = ca.simulate(input_size / 2);
+    ca.simulate(input_size / 2);
     // plot the simulation
-    vis::draw("rule_30.png", &output).unwrap();
+    vis::draw("rule_30.png", &ca.output.unwrap()).unwrap();
 }
