@@ -8,7 +8,7 @@ fn main() {
     // define the initial input
     let input = ca::new_default_input(input_size);
     // build the cellular automata
-    let ca = CA::new(r, input);
+    let mut ca = CA::new(r, input);
     // simulate some number of steps (here it's N = half the input length)
     let output = ca.simulate(input_size / 2);
     // plot the simulation
