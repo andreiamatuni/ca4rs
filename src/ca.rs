@@ -1,6 +1,7 @@
 use anyhow::Result;
 use itertools::Itertools;
 use ndarray::prelude::*;
+use rand::prelude::*;
 
 use std::{
     sync::{Arc, Mutex, RwLock},
@@ -84,7 +85,15 @@ pub fn new_default_input(size: usize) -> Vec<u8> {
     input
 }
 
-/// Generate all the unique permutations of input for a given size
+pub fn random_input(size: usize) -> Vec<u8> {
+    // let input: Vec<u8> = vec![0; size];
+    let mut rng = rand::thread_rng();
+    // let input = input.iter().map(|_| rng.gen_range((0..=1))).collect();
+    let input = (0..size).map(|_| rng.gen_range((0..=1))).collect();
+    input
+}
+
+/// Generate all the unique permutations of input for a given input size
 pub fn permutations(input_size: usize) -> Vec<Vec<u8>> {
     itertools::repeat_n(0..=1, input_size)
         .multi_cartesian_product()

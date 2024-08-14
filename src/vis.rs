@@ -3,8 +3,8 @@ use ndarray::prelude::*;
 use plotters::prelude::*;
 use plotters::style::full_palette::GREY_200;
 
-pub fn draw(output: &str, sim: &Array2<u8>) -> Result<()> {
-    let root = BitMapBackend::new(output, (8192, 4096)).into_drawing_area();
+pub fn draw(output: &str, sim: &Array2<u8>, width: u32, height: u32) -> Result<()> {
+    let root = BitMapBackend::new(output, (width, height)).into_drawing_area();
 
     root.fill(&WHITE)?;
 
