@@ -7,7 +7,7 @@ mod tests {
     use anyhow::Result;
     use ca4rs::rule::Rule;
     use ca4rs::*;
-    use ndarray::prelude::*;
+    // use ndarray::prelude::*;
 
     #[test]
     pub fn basic() -> Result<()> {
@@ -47,7 +47,7 @@ mod tests {
     #[test]
     pub fn random_input() -> Result<()> {
         let input_size = 501;
-        let rule_number = 122;
+        let rule_number = 110;
 
         let r = Rule::number(rule_number)?;
         let input = ca::random_input(input_size);
@@ -60,6 +60,39 @@ mod tests {
             8096,
         )?;
 
+        Ok(())
+    }
+
+    #[test]
+    pub fn cells_on() -> Result<()> {
+        let input_size = 10;
+        let rule_number = 110;
+
+        let r = Rule::number(rule_number)?;
+        let input = ca::new_default_input(input_size / 2);
+        let mut ca = ca::CA::new(r, input);
+        ca.simulate(input_size);
+
+        ca.num_cells_on();
+
+        Ok(())
+    }
+
+    #[test]
+    pub fn new_lookup() -> Result<()> {
+        let input_size = 21;
+        let rule_number = 30;
+
+        let r = Rule::number(rule_number)?;
+        let input = ca::new_default_input(input_size);
+        let mut ca = ca::CA::new(r, input);
+        ca.simulate(input_size / 2);
+        vis::draw(
+            &format!("output/rule_{rule_number}_test.png"),
+            &ca.output.as_ref().unwrap(),
+            8096,
+            8096,
+        )?;
         Ok(())
     }
 }

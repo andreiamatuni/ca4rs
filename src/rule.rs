@@ -4,8 +4,14 @@ use anyhow::Result;
 
 #[derive(Clone, Debug)]
 pub struct Rule {
-    /// function mapping neighborhoods to outputs
-    pub func: HashMap<String, u8>,
+    pub f1: u8,
+    pub f2: u8,
+    pub f3: u8,
+    pub f4: u8,
+    pub f5: u8,
+    pub f6: u8,
+    pub f7: u8,
+    pub f8: u8,
 }
 
 impl Rule {
@@ -38,16 +44,16 @@ impl Rule {
             }
         }
 
-        let mut func = HashMap::new();
-        func.insert("111".into(), map[0]);
-        func.insert("110".into(), map[1]);
-        func.insert("101".into(), map[2]);
-        func.insert("100".into(), map[3]);
-        func.insert("011".into(), map[4]);
-        func.insert("010".into(), map[5]);
-        func.insert("001".into(), map[6]);
-        func.insert("000".into(), map[7]);
-        Ok(Self { func })
+        Ok(Self {
+            f1: map[0],
+            f2: map[1],
+            f3: map[2],
+            f4: map[3],
+            f5: map[4],
+            f6: map[5],
+            f7: map[6],
+            f8: map[7],
+        })
     }
 
     /// Create a Rule based on the standard set of 256 rule numberings
@@ -62,7 +68,17 @@ impl Rule {
     }
 
     /// Lookup the output given a neighborhood
-    pub(crate) fn lookup(&self, input: &str) -> u8 {
-        self.func.get(input).unwrap().to_owned()
+    pub(crate) fn lookup2(&self, input: u8) -> u8 {
+        match input {
+            7 => self.f1,
+            6 => self.f2,
+            5 => self.f3,
+            4 => self.f4,
+            3 => self.f5,
+            2 => self.f6,
+            1 => self.f7,
+            0 => self.f8,
+            _ => 0,
+        }
     }
 }

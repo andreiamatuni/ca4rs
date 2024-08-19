@@ -4,7 +4,7 @@ use ndarray::prelude::*;
 use rand::prelude::*;
 
 use std::{
-    sync::{Arc, Mutex, RwLock},
+    sync::{Arc, Mutex},
     thread,
 };
 
@@ -41,8 +41,9 @@ impl CA {
 
         for sim in 0..len - 1 {
             for i in 1..res.shape()[1] - 1 {
-                let neighbors = self.cells_to_str(i, &res.slice(s![sim, 0..]));
-                let cell_output = self.rule.lookup(&neighbors);
+                let neighbors = self.cells_to_neighbors(i, &res.slice(s![sim, 0..]));
+
+                let cell_output = self.rule.lookup2(neighbors);
                 res[[sim + 1, i]] = cell_output;
             }
         }
@@ -66,14 +67,28 @@ impl CA {
     /// Count number of cells in an "off" state
     pub fn num_cells_off(&self) -> Result<usize> {
         let num_on = self.num_cells_on()?;
-        let shape = self.output.as_ref().unwrap().shape();
-        let total_count = shape[0] * shape[1];
+        let total_count: usize = self.output.as_ref().unwrap().shape().into_iter().product();
         Ok(total_count - num_on)
     }
 
-    fn cells_to_str(&self, idx: usize, row: &ArrayView1<u8>) -> String {
-        let string = format!("{}{}{}", row[idx - 1], row[idx], row[idx + 1]);
-        string
+    #[inline]
+    fn cells_to_neighbors(&self, idx: usize, row: &ArrayView1<u8>) -> u8 {
+        let r1: u8;
+        let r2: u8;
+        let r3: u8;
+
+        r1 = row[idx - 1] << 2;
+        r2 = row[idx] << 1;
+        r3 = row[idx + 1];
+
+        println!("{:08b} - {:08b}", row[idx - 1], r1);
+        println!("{:08b} - {:08b}", row[idx], r2);
+        println!("{:08b} - {:08b}", row[idx + 1], r3);
+
+        let result = r1 | r2 | r3;
+        println!("{result:08b}");
+        println!("");
+        result
     }
 }
 
@@ -86,10 +101,8 @@ pub fn new_default_input(size: usize) -> Vec<u8> {
 }
 
 pub fn random_input(size: usize) -> Vec<u8> {
-    // let input: Vec<u8> = vec![0; size];
     let mut rng = rand::thread_rng();
-    // let input = input.iter().map(|_| rng.gen_range((0..=1))).collect();
-    let input = (0..size).map(|_| rng.gen_range((0..=1))).collect();
+    let input = (0..size).map(|_| rng.gen_range(0..=1)).collect();
     input
 }
 
