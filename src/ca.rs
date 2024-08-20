@@ -39,11 +39,11 @@ impl CA {
         let input = Array1::<u8>::from_vec(self.input.clone());
         res.slice_mut(s![0, 0..]).assign(&input);
 
+        // compute the outputs for N=len steps
         for sim in 0..len - 1 {
             for i in 1..res.shape()[1] - 1 {
                 let neighbors = self.cells_to_neighbors(i, &res.slice(s![sim, 0..]));
-
-                let cell_output = self.rule.lookup2(neighbors);
+                let cell_output = self.rule.lookup(neighbors);
                 res[[sim + 1, i]] = cell_output;
             }
         }
@@ -71,23 +71,20 @@ impl CA {
         Ok(total_count - num_on)
     }
 
+    /// Encode the neighbors centered around a given index as a u8 representation
     #[inline]
     fn cells_to_neighbors(&self, idx: usize, row: &ArrayView1<u8>) -> u8 {
         let r1: u8;
         let r2: u8;
         let r3: u8;
 
+        // build a u8 representation of the neighborhood using the final 3 bits of a u8
         r1 = row[idx - 1] << 2;
         r2 = row[idx] << 1;
         r3 = row[idx + 1];
 
-        println!("{:08b} - {:08b}", row[idx - 1], r1);
-        println!("{:08b} - {:08b}", row[idx], r2);
-        println!("{:08b} - {:08b}", row[idx + 1], r3);
-
+        // superimpose the 3 cells into a single u8
         let result = r1 | r2 | r3;
-        println!("{result:08b}");
-        println!("");
         result
     }
 }

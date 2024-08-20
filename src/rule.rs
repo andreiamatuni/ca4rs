@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 
 use anyhow::Result;
 
@@ -68,7 +67,7 @@ impl Rule {
     }
 
     /// Lookup the output given a neighborhood
-    pub(crate) fn lookup2(&self, input: u8) -> u8 {
+    pub(crate) fn lookup(&self, input: u8) -> u8 {
         match input {
             7 => self.f1,
             6 => self.f2,

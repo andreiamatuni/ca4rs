@@ -7,7 +7,6 @@ mod tests {
     use anyhow::Result;
     use ca4rs::rule::Rule;
     use ca4rs::*;
-    // use ndarray::prelude::*;
 
     #[test]
     pub fn basic() -> Result<()> {
