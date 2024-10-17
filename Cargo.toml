@@ -2,6 +2,12 @@
 name = "ca4rs"
 version = "0.1.0"
 edition = "2021"
+description = "Cellular Automata for Rust"
+repository = "https://github.com/andreiamatuni/ca4rs"
+homepage = "https://github.com/andreiamatuni/ca4rs"
+license = "MIT"
+keywords = ["cellular automata", "simulation"]
+readme = "README.md"
 
 [dependencies]
 anyhow = "1.0.86"
