@@ -6,7 +6,7 @@ description = "Cellular Automata for Rust"
 repository = "https://github.com/andreiamatuni/ca4rs"
 homepage = "https://github.com/andreiamatuni/ca4rs"
 license = "MIT"
-keywords = ["cellular automata", "simulation"]
+keywords = ["cellular-automata", "simulation"]
 readme = "README.md"
 
 [dependencies]
